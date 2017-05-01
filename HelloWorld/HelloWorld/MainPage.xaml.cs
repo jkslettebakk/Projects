@@ -31,7 +31,7 @@ namespace HelloWorld
         private void ButtonClick(object sender, RoutedEventArgs e)
         {
          if (TextBox.Text  != "") 
-            TextBox.Text = "Hello: " + TextBox.Text;
+            TextBox.Text = "Git hello: " + TextBox.Text;
          else 
             TextBox.Text = "You have not written anything";
         }
