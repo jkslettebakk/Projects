@@ -10,5 +10,6 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Button x:Name="Button" Click="ButtonClick" Content="Button" HorizontalAlignment="Left" Height="45" Margin="10,77,0,0" VerticalAlignment="Top" Width="99"/>
         <TextBox x:Name="TextBox" HorizontalAlignment="Left" Height="57" Margin="109,244,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="149"/>
+        <Button x:Name="Exit" Click="ExitButtonClick" Content="Exit" HorizontalAlignment="Left" Height="45" Margin="10,345,0,0" VerticalAlignment="Top" Width="99"/>
     </Grid>
 </Page>

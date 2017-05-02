@@ -36,6 +36,10 @@ namespace HelloWorld
             TextBox.Text = "You have not written anything";
         }
 
+        private void ExitButtonClick(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Exit();
+        }
     }
 
 }
