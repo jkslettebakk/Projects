@@ -47,7 +47,7 @@ namespace IoTRemovableFiles
                 var usbDrive = externalDrives.Single(e => e.DisplayName.Contains("USB DISK"));
                 string fn = string.Format("{0}.jpg", fileName);
 
-                titleTextBlock.Text = "Will try to open:" + fn + " on USB Drive" + usbDrive.Name;
+                titleTextBlock.Text = "Will try to open:" + fn + " on USB Drive:" + usbDrive.Name;
 
                 StorageFile appconfig = await usbDrive.CreateFileAsync(
                     fn,
