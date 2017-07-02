@@ -22,6 +22,8 @@ namespace HelloIoTWorld
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        public int loop = 0;
+
         public MainPage()
         {
             this.InitializeComponent();
@@ -29,12 +31,12 @@ namespace HelloIoTWorld
 
         private void ClickMe_Click(object sender, RoutedEventArgs e)
         {
-            this.HelloMessage.Text = "Hello, Windows 10 IoT Core!";
+            this.HelloMessage.Text = "Hello, Windows 10 IoT Core! " + (loop +=1) + " ";
         }
 
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
-            Application.Current.Exit();
+            HelloIoTWorld.App.Current.Exit();
         }
     }
 }
