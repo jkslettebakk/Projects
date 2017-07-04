@@ -42,6 +42,23 @@ namespace IoTRemovableFiles
 
             try
             {
+                // Create sample file; replace if exists.
+                Windows.Storage.StorageFolder storageFolder =
+                    Windows.Storage.ApplicationData.Current.LocalFolder;
+                Windows.Storage.StorageFile sampleFile =
+                    await storageFolder.CreateFileAsync("sample.txt",
+                        Windows.Storage.CreationCollisionOption.OpenIfExists);
+                // Writing to the file
+                await Windows.Storage.FileIO.AppendTextAsync(sampleFile, "Swift as a shadow" + System.Environment.NewLine);
+            }
+            catch (Exception e)
+            {
+
+            }
+
+
+            try
+            {
                 var removableDevices = KnownFolders.RemovableDevices;
                 var externalDrives = await removableDevices.GetFoldersAsync();
                 var usbDrive = externalDrives.Single(e => e.DisplayName.Contains("USB DISK"));
