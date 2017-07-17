@@ -36,52 +36,123 @@ namespace IoTRemovableFiles
     public sealed partial class MainPage : Page
     {
         public MyAppData AppData { get; set; }
+
         public async Task OpenAppFile(string fileName)
         {
 
 
-            try
+            try // Create a local files (open and add text if exist) for writing a short text
             {
-                // Create sample file; replace if exists.
+                // Create sample file, open if exists
+                string fn = fileName + "-Sequensial.txt";
                 Windows.Storage.StorageFolder storageFolder =
                     Windows.Storage.ApplicationData.Current.LocalFolder;
                 Windows.Storage.StorageFile sampleFile =
-                    await storageFolder.CreateFileAsync("sample.txt",
+                    await storageFolder.CreateFileAsync(fn,
                         Windows.Storage.CreationCollisionOption.OpenIfExists);
                 // Writing to the file
-                await Windows.Storage.FileIO.AppendTextAsync(sampleFile, "Swift as a shadow" + System.Environment.NewLine);
+                await Windows.Storage.FileIO.AppendTextAsync(sampleFile, "Swift as a shadow" + Environment.NewLine);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-
+                myTextBox.Text += ex.Message;
             }
 
+            try // Create a local files (open and add text if exist) for writing a short text
+            {
+                // Create sample stream file, open if exists
+                string fn = fileName + "-Stream.txt";
+                Windows.Storage.StorageFolder storageFolder =
+                    Windows.Storage.ApplicationData.Current.LocalFolder;
+                Windows.Storage.StorageFile sampleFile =
+                    await storageFolder.CreateFileAsync(fn,
+                        Windows.Storage.CreationCollisionOption.OpenIfExists);
+                var stream = await sampleFile.OpenAsync(Windows.Storage.FileAccessMode.ReadWrite);
 
+                using (var outputStream = stream.GetOutputStreamAt(stream.Size))
+                {
+                    // We'll add more code here in the next step.
+                    using (var dataWriter = new Windows.Storage.Streams.DataWriter(outputStream))
+                    {
+                        dataWriter.WriteString("DataWriter has methods to write to various types, such as DataTimeOffset." + Environment.NewLine);
+                        await dataWriter.StoreAsync();
+                        await outputStream.FlushAsync();
+                    }
+                }
+                stream.Dispose(); // Or use the stream variable (see previous code snippet) with a using statement as well.
+
+            }
+            catch (Exception ex)
+            {
+                myTextBox.Text += ex.Message;
+            }
+
+            try // Initial/create OneDrive stream for write/append text
+            {
+                // Create file Stream towards OneDrive datastore
+
+            }
+            catch (Exception ex)
+            {
+                myTextBox.Text += ex.Message;
+            }
+
+            //OK, then we are ready to read/write file
+
+            /*            try // Try to open file at USB drive
+                        {
+                            var removableDevices = KnownFolders.RemovableDevices;
+                            var externalDrives = await removableDevices.GetFoldersAsync();
+                            var usbDrive = externalDrives.Single(e => e.DisplayName.Contains("USB DISK"));
+                            string fn = usbDrive.Name + string.Format("{0}.jpg", fileName);
+
+                            myTextBox.Text += "Will try to open:" + fn + " on USB Drive:" + usbDrive.Name;
+
+                            StorageFile appconfig = await usbDrive.CreateFileAsync(
+                                fn,
+                                CreationCollisionOption.OpenIfExists);
+
+                            using (StreamReader reader = new StreamReader(await appconfig.OpenStreamForReadAsync()))
+                            {
+                                var data = await reader.ReadToEndAsync();
+                                AppData = Newtonsoft.Json.JsonConvert.DeserializeObject<MyAppData>(data);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            // error
+                            myTextBox.Text += ex.Message;
+                        }
+            */
             try
             {
-                var removableDevices = KnownFolders.RemovableDevices;
-                var externalDrives = await removableDevices.GetFoldersAsync();
-                var usbDrive = externalDrives.Single(e => e.DisplayName.Contains("USB DISK"));
-                string fn = string.Format("{0}.jpg", fileName);
+                // Open and read the file
 
-                titleTextBlock.Text = "Will try to open:" + fn + " on USB Drive:" + usbDrive.Name;
+                // Create/open sample file; replace if exists.
 
-                StorageFile appconfig = await usbDrive.CreateFileAsync(
-                    fn,
-                    CreationCollisionOption.OpenIfExists);
+                string fn = fileName + ".jpg";
+                Windows.Storage.StorageFolder storageFolder =
+                    Windows.Storage.ApplicationData.Current.LocalFolder;
+
+                myTextBox.Text += "Will try to open: " + fn + " in " + storageFolder.Path;
+
+                StorageFile appconfig = await storageFolder.CreateFileAsync(fn,
+                        Windows.Storage.CreationCollisionOption.OpenIfExists);
 
                 using (StreamReader reader = new StreamReader(await appconfig.OpenStreamForReadAsync()))
                 {
                     var data = await reader.ReadToEndAsync();
                     AppData = Newtonsoft.Json.JsonConvert.DeserializeObject<MyAppData>(data);
                 }
+
             }
             catch (Exception ex)
             {
-                // error
-                titleTextBlock.Text = ex.Message;
-            }
 
+                // Exceptopn
+                myTextBox.Text += ex.Message;
+
+            }
 
         }
 
@@ -131,7 +202,7 @@ namespace IoTRemovableFiles
             await this.OpenAppFile("MyAppData");
 
             titleTextBlock.Text = AppData.MAINPAGETITLE;
-            myTextBox.Text = AppData.MAININT.ToString();
+            myTextBox.Text += AppData.MAININT.ToString();
 
             await InitLog(AppData.LOGFILENAME).ContinueWith(async (antecedent) =>
             {
@@ -151,7 +222,7 @@ namespace IoTRemovableFiles
                 await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(
                     Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
                     {
-                        myTextBox.Text = string.Empty;
+                        myTextBox.Text += string.Empty;
                         logButton.IsEnabled = true;
                     });
             });
