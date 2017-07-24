@@ -55,7 +55,7 @@ namespace IoTRemovableFiles
             }
             catch (Exception ex)
             {
-                myTextBox.Text += ex.Message;
+                DebugTextBox.Text += ex.Message;
             }
 
             try // Create a local files (open and add text if exist) for writing a short text
@@ -84,7 +84,7 @@ namespace IoTRemovableFiles
             }
             catch (Exception ex)
             {
-                myTextBox.Text += ex.Message;
+                DebugTextBox.Text += ex.Message;
             }
 
             try // Initial/create OneDrive stream for write/append text
@@ -94,7 +94,7 @@ namespace IoTRemovableFiles
             }
             catch (Exception ex)
             {
-                myTextBox.Text += ex.Message;
+                DebugTextBox.Text += ex.Message;
             }
 
             //OK, then we are ready to read/write file
@@ -106,7 +106,7 @@ namespace IoTRemovableFiles
                             var usbDrive = externalDrives.Single(e => e.DisplayName.Contains("USB DISK"));
                             string fn = usbDrive.Name + string.Format("{0}.jpg", fileName);
 
-                            myTextBox.Text += "Will try to open:" + fn + " on USB Drive:" + usbDrive.Name;
+                            DebugTextBox.Text += "Will try to open:" + fn + " on USB Drive:" + usbDrive.Name;
 
                             StorageFile appconfig = await usbDrive.CreateFileAsync(
                                 fn,
@@ -121,7 +121,7 @@ namespace IoTRemovableFiles
                         catch (Exception ex)
                         {
                             // error
-                            myTextBox.Text += ex.Message;
+                            DebugTextBox.Text += ex.Message;
                         }
             */
             try
@@ -134,7 +134,7 @@ namespace IoTRemovableFiles
                 Windows.Storage.StorageFolder storageFolder =
                     Windows.Storage.ApplicationData.Current.LocalFolder;
 
-                myTextBox.Text += "Will try to open: " + fn + " in " + storageFolder.Path;
+                DebugTextBox.Text += "Will try to open: " + fn + " in " + storageFolder.Path;
 
                 StorageFile appconfig = await storageFolder.CreateFileAsync(fn,
                         Windows.Storage.CreationCollisionOption.OpenIfExists);
@@ -150,7 +150,7 @@ namespace IoTRemovableFiles
             {
 
                 // Exceptopn
-                myTextBox.Text += ex.Message;
+                DebugTextBox.Text += ex.Message;
 
             }
 
@@ -202,7 +202,7 @@ namespace IoTRemovableFiles
             await this.OpenAppFile("MyAppData");
 
             titleTextBlock.Text = AppData.MAINPAGETITLE;
-            myTextBox.Text += AppData.MAININT.ToString();
+            DebugTextBox.Text += AppData.MAININT.ToString();
 
             await InitLog(AppData.LOGFILENAME).ContinueWith(async (antecedent) =>
             {
@@ -217,12 +217,12 @@ namespace IoTRemovableFiles
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
             logButton.IsEnabled = false;
-            await WriteLogAsync(Environment.NewLine + myTextBox.Text).ContinueWith(async (successAsync) =>
+            await WriteLogAsync(Environment.NewLine + DebugTextBox.Text).ContinueWith(async (successAsync) =>
             {
                 await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(
                     Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
                     {
-                        myTextBox.Text += string.Empty;
+                        DebugTextBox.Text += string.Empty;
                         logButton.IsEnabled = true;
                     });
             });

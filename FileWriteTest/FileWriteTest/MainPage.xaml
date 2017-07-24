@@ -12,7 +12,8 @@
         <StackPanel>
             <TextBlock x:Name="titleTextBlock" FontSize="60" />
             <Button x:Name="logButton" Click="Button_Click" IsEnabled="False">Write Log</Button>
-            <TextBox x:Name="myTextBox" FontSize="60" />
+            <TextBox x:Name="myTextBox" FontSize="40" />
+            <TextBox x:Name="DebugTextBox" TextWrapping="Wrap" Text="TextBox" Height="458" />
         </StackPanel>
     </Grid>
 </Page>
